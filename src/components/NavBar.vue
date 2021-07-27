@@ -16,7 +16,6 @@
             text-2xl
             lg:text-4xl
           "
-        
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -36,8 +35,15 @@
         </router-link>
 
         <div class="flex w-1/2 justify-end content-center">
-          <Btn>Log In</Btn>
-          <Btn class="">Sign Up</Btn>
+          <router-link to="/login">
+            <Btn v-if="!loggedIn">Log In</Btn>
+          </router-link>
+          <router-link to="/signup">
+            <Btn v-if="!loggedIn">Sign Up</Btn>
+          </router-link>
+          <router-link to="/login">
+            <Btn v-if="loggedIn" @click.prevent="this.Logout()">log out</Btn>
+          </router-link>
         </div>
       </div>
     </div>
@@ -50,6 +56,19 @@ export default {
   name: "NavBar",
   components: {
     Btn,
+  },
+  computed: {
+    loggedIn() {
+      return this.SignedIn();
+    },
+  },
+  methods: {
+    goLogin() {
+      this.Goto({ name: "Login" });
+    },
+    goSignup() {
+      this.Goto({ name: "signup" });
+    },
   },
 };
 </script>

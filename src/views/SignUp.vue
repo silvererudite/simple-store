@@ -8,10 +8,9 @@
       </h1>
       <form>
         <div class="flex flex-col mb-4">
-          <label class="mb-2 font-bold text-lg text-gray-900" for="first_name"
-            >Name</label
-          >
+          <label class="mb-2 font-bold text-lg text-gray-900">Name</label>
           <input
+            v-model="register.name"
             class="border py-2 px-3 text-grey-800"
             type="text"
             name="first_name"
@@ -23,6 +22,7 @@
             >Email</label
           >
           <input
+            v-model="register.email"
             class="border py-2 px-3 text-grey-800"
             type="email"
             name="email"
@@ -38,6 +38,7 @@
             type="password"
             name="password"
             id="password"
+            v-model="register.password"
           />
         </div>
         <div class="flex flex-col mb-4">
@@ -48,6 +49,7 @@
             class="border py-2 px-3 text-grey-800"
             type="text"
             name="company"
+            v-model="register.company"
             id="last_name"
           />
         </div>
@@ -55,9 +57,9 @@
           <label class="mb-2 font-bold text-lg text-gray-900" for="last_name"
             >Are you a supplier</label
           >
-          <select name="user_type" id="type">
-            <option value="supplier">True</option>
-            <option value="user">False</option>
+          <select name="user_type" id="type" v-model="register.isSupplier">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
           </select>
         </div>
         <Btn
@@ -71,11 +73,12 @@
             p-4
             rounded
           "
+          @click.prevent="signUp()"
         >
           Create Account
         </Btn>
       </form>
-      <a
+      <router-link
         class="
           block
           w-full
@@ -85,10 +88,11 @@
           text-sm text-gray-700
           hover:text-gray-900
         "
-        href="/login"
-        >Already have an account?</a
+        to="/login"
+        >Already have an account?</router-link
       >
     </div>
+    <!-- <pre>{{ register }}</pre> -->
   </div>
 </template>
 
@@ -102,13 +106,33 @@ export default {
   data() {
     return {
       register: {
-        name: "Test_shm ",
-        email: "test_shm3@gmail.com",
-        password: "test123",
+        name: "",
+        email: "",
+        password: "",
         isSupplier: false,
-        company: "Test",
+        company: "",
       },
     };
+  },
+  methods: {
+    validateEmail(email) {
+      const re =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    },
+    signUp() {
+      console.log("here");
+      this.$service
+        .signup(this.register)
+        .then((res) => {
+          //console.log("this", res.data.createdUser);
+          this.LocalStore("userInfo", res.data.createdUser.id);
+          this.Goto({ name: "Login" });
+        })
+        .catch(() => {
+          this.ErrorAlert("Please put correct email/password");
+        });
+    },
   },
 };
 </script>

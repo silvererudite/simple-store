@@ -17,10 +17,10 @@ service.interceptors.request.use((request) => {
   const token = window.localStorage.getItem("refresh_token");
   const session_token = window.localStorage.getItem("access_token");
 
+  // if (token) {
+  //   request.headers["Authorization"] = `Bearer ${token}`;
+  // }
   if (token) {
-    request.headers["Authorization"] = `Bearer ${token}`;
-  }
-  if (session_token && session_token.length > 0) {
     request.headers["token"] = `${session_token}`;
   }
   return request;
@@ -29,7 +29,18 @@ service.interceptors.request.use((request) => {
 service.interceptors.response.use(
   (response) => response,
   (error) => {
-    // console.log("http error", error);
+    const originalRequest = error.config;
+    if (
+      error.response.status === 401 &&
+      originalRequest.url.includes("users/new_access_token")
+    ) {
+      this.Logout();
+      return Promise.reject(error);
+    } else if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      this.$store.dispatch("refreshToken");
+      return Axios(originalRequest);
+    }
     return Promise.reject(error.status ? error : error.response);
   }
 );
@@ -74,7 +85,7 @@ export default {
   post(url, param, realParam = {}) {
     return access(url, param, "post", realParam);
   },
-  put(url, param, realParam = {}) {
-    return access(url, param, "put", realParam);
+  patch(url, param, realParam = {}) {
+    return access(url, param, "patch", realParam);
   },
 };

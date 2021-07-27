@@ -6,7 +6,7 @@
       >
         Log In
       </h1>
-      <form action="/" method="post">
+      <form>
         <div class="flex flex-col mb-4">
           <label class="mb-2 font-bold text-lg text-gray-900" for="email"
             >Email</label
@@ -16,6 +16,7 @@
             type="email"
             name="email"
             id="email"
+            v-model="userInfo.email"
           />
         </div>
         <div class="flex flex-col mb-4">
@@ -27,6 +28,7 @@
             type="password"
             name="password"
             id="password"
+            v-model="userInfo.password"
           />
         </div>
         <Btn
@@ -40,11 +42,13 @@
             p-4
             rounded
           "
+          @click.prevent="login()"
         >
           Log In
         </Btn>
       </form>
     </div>
+    <!-- <pre>{{ userInfo }}</pre> -->
   </div>
 </template>
 
@@ -54,6 +58,31 @@ export default {
   name: "Login",
   components: {
     Btn,
+  },
+  data() {
+    return {
+      userInfo: {
+        email: "",
+        password: "",
+      },
+    };
+  },
+  methods: {
+    login() {
+      this.$service
+        .login(this.userInfo)
+        .then((res) => {
+          localStorage.removeItem("refresh_token");
+          localStorage.removeItem("access_token");
+          localStorage.setItem("access_token", res.data.access_token);
+          localStorage.setItem("refresh_token", res.data.refresh_token);
+          const t = JSON.parse(localStorage.getItem("userInfo"));
+          this.$router.push({ name: "profile", params: { id: t } });
+        })
+        .catch(() => {
+          this.ErrorAlert("Please put correct email/password");
+        });
+    },
   },
 };
 </script>

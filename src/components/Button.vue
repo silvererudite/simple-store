@@ -6,7 +6,8 @@
 
 <script>
 export default {
-  name: "TextBtn",
+  name: "Btn",
+  inheritAttrs: true,
 };
 </script>
 

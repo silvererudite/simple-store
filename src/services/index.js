@@ -2,7 +2,7 @@
 /* eslint-disable max-len  */
 import request from "./utils";
 
-const backendURL = "http://18.140.53.142";
+const backendURL = " http://localhost:8080";
 
 const usr = {
   getQuizzesByOrgID: (id) => `${backendURL}/user/quizzes/${id}`,
@@ -15,12 +15,19 @@ const usr = {
   submitAssignment: `${backendURL}/user/submitassignment`,
 };
 
-const FP = {
-  initial: `${backendURL}/public/forget_password_request`,
-  checkToken: `${backendURL}/public/forget_password`,
-  final: `${backendURL}/public/pwd_request`,
+const auth = {
+  signup: `${backendURL}/users/signup`,
+  login: `${backendURL}/users/login`,
+  new_token: `${backendURL}/users/new_access_token`,
+  gotoProfile: (id) => `${backendURL}/users/${id}`,
 };
 
+const prod = {
+  getProducts: `${backendURL}/products`,
+  getProductById: (id) => `${backendURL}/products/${id}`,
+  removeProductById: (id) => `${backendURL}/products/${id}`,
+  createProduct: `${backendURL}/products`,
+};
 export default new (function Service() {
   // USR ROUTES
   this.usrGetQuizzesByOrgID = (orgID) =>
@@ -34,11 +41,14 @@ export default new (function Service() {
   this.usrgetAssignmentResultByID = (id) =>
     request.get(usr.getAssignmentResultByID(id));
   //login
-  this.loginUser = (body) => request.post(backendURL.loginUser, body);
-  //forget password
-  this.pwInit = (email) => request.post(FP.initial, { email });
-  this.decodeToken = (token) =>
-    request.post("https://auth.upskill.com.bd/decode", {
-      token: token,
-    });
+  this.login = (body) => request.post(auth.login, body);
+  //signup
+  this.signup = (body) => request.post(auth.signup, body);
+  //get new token
+  this.refreshToken = (body) => request.get(auth.new_token, { body });
+  //go to profile
+  this.profileInfo = (id) => request.get(auth.gotoProfile(id));
+  //product
+  this.createProduct = (body) => request.post(prod.createProduct, body);
+  this.getProducts = () => request.get(prod.getProducts);
 })();
