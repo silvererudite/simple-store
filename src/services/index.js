@@ -2,7 +2,7 @@
 /* eslint-disable max-len  */
 import request from "./utils";
 
-const backendURL = "http://localhost:8080";
+const backendURL = "http://52.221.196.218";
 
 const auth = {
   signup: `${backendURL}/users/signup`,
