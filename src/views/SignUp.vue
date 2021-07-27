@@ -122,21 +122,30 @@ export default {
     },
     signUp() {
       //console.log("here");
-      this.$service
-        .signup(this.register)
-        .then((res) => {
-          //console.log("this", res.data.createdUser);
-          //this.LocalStore("userInfo", res.data.createdUser.id);
-          Swal.fire({
-            icon: "info",
-            title: "Please save your user id for logging in",
-            text: res.data.createdUser.id,
+      if (
+        !this.register.email == "" ||
+        !this.register.password == "" ||
+        !this.register.name == "" ||
+        !this.register.company == ""
+      ) {
+        this.$service
+          .signup(this.register)
+          .then((res) => {
+            //console.log("this", res.data.createdUser);
+            //this.LocalStore("userInfo", res.data.createdUser.id);
+            Swal.fire({
+              icon: "info",
+              title: "Please save your user id for logging in",
+              text: res.data.createdUser.id,
+            });
+            this.Goto({ name: "Login" });
+          })
+          .catch(() => {
+            this.ErrorAlert("Please put correct email/password");
           });
-          this.Goto({ name: "Login" });
-        })
-        .catch(() => {
-          this.ErrorAlert("Please put correct email/password");
-        });
+      } else {
+        this.ErrorAlert("Please fill all the fields");
+      }
     },
   },
 };

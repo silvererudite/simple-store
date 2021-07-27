@@ -137,7 +137,7 @@
           </div>
         </div>
       </div>
-      <pre>{{ cart }}</pre>
+      <!-- <pre>{{ cart }}</pre> -->
       <div v-show="!isSupplier" class="w-full xl:w-1/3 px-3">
         <p class="text-xl font-semibold mb-4">Your Cart</p>
         <div class="w-full bg-white border rounded-lg p-4">
