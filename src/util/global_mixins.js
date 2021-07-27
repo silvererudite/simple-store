@@ -57,12 +57,6 @@ const mixins = {
     Goto(obj) {
       this.$router.push(obj);
     },
-    GotoProfile() {
-      this.$router.push({ name: "user_profile" });
-    },
-    Loaded() {
-      this.$store.state.loaded = true;
-    },
     /**
      * @return {boolean}
      */
@@ -79,15 +73,6 @@ const mixins = {
     },
     GotoHome() {
       this.$router.push({ name: "home" });
-    },
-    GetPendingInvoice() {
-      return localStorage.getItem("pendingInvoicePage");
-    },
-    SetPendingInvoice() {
-      localStorage.setItem("pendingInvoicePage", "subscription");
-    },
-    RemovePendingInvoice() {
-      localStorage.removeItem("pendingInvoicePage");
     },
     Logout() {
       this.RemoveToken();
