@@ -11,8 +11,6 @@
         <div class="p-6 bg-gray-100 mb-20">
           <ProfileDetail />
         </div>
-
-        <Footer />
       </div>
     </div>
   </div>
@@ -21,10 +19,9 @@
 <script>
 import { mapState } from "vuex";
 
-import Footer from "@/components/Footer.vue";
+//import Footer from "@/components/Footer.vue";
 import Sidebar from "@/components/Sidebar.vue";
 import ProfileDetail from "@/components/ProfileDetail.vue";
-
 export default {
   name: "Dashboard",
   computed: {
@@ -32,14 +29,14 @@ export default {
   },
   components: {
     Sidebar,
-    Footer,
+    //Footer,
     ProfileDetail,
   },
   created() {
     this.$service
       .profileInfo(this.$route.params.id)
       .then((res) => {
-        this.user = res.data.user;
+        this.$store.dispatch("triggerUserSetting", res.data.user);
       })
       .catch((err) => this.ErrorAlert(err));
   },

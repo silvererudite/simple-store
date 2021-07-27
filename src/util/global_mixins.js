@@ -48,8 +48,8 @@ const mixins = {
         timerProgressBar: true,
       });
     },
-    Alert: (title, message, type) => {
-      alert.fire(title, message, type);
+    Alert: (title, message) => {
+      alert.fire(title, message);
     },
     /**
      * @return {number}

@@ -1,5 +1,7 @@
 import Axios from "axios";
-
+import router from "../router";
+//import service1 from "../services";
+import store from "../store";
 const service = Axios.create({
   headers: {
     "content-type": "application/json;charset=utf-8",
@@ -30,15 +32,19 @@ service.interceptors.response.use(
   (response) => response,
   (error) => {
     const originalRequest = error.config;
+    //console.log(originalRequest);
     if (
       error.response.status === 401 &&
       originalRequest.url.includes("users/new_access_token")
     ) {
-      this.Logout();
+      console.log("here1");
+      router.push({ name: "Login" });
       return Promise.reject(error);
     } else if (error.response.status === 401 && !originalRequest._retry) {
+      console.log("here2");
       originalRequest._retry = true;
-      this.$store.dispatch("refreshToken");
+      //console.log(originalRequest);
+      store.dispatch("refreshToken", this);
       return Axios(originalRequest);
     }
     return Promise.reject(error.status ? error : error.response);
@@ -56,8 +62,8 @@ function access(url, param, method, realParam = {}) {
 
   if (upperMethod === "POST") {
     ret = service.post(url, param, { ...realParam });
-  } else if (upperMethod === "PUT") {
-    ret = service.put(url, param, { ...realParam });
+  } else if (upperMethod === "PATCH") {
+    ret = service.patch(url, param, { ...realParam });
   } else if (upperMethod === "DELETE") {
     ret = service.delete(url, { ...param });
   } else {

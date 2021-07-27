@@ -1,25 +1,30 @@
 import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
+  plugins: [createPersistedState()],
   state: {
     refresh_token: "",
     access_token: "",
     loggedInUser: {},
     isAuthenticated: false,
     products: "",
-    sideBarOpen: false,
+    sideBarOpen: true,
+    user: "",
+    viewProducts: "",
+    cart: "",
   },
   mutations: {
-    setProducts: function (state, payload) {
+    setProducts(state, payload) {
       state.products = payload;
     },
-    setAccessToken: function (state, accessToken) {
-      state.access_token = accessToken;
+    setCart: function (state, payload) {
+      state.cart = payload;
     },
     // sets state with user information and toggles
     // isAuthenticated from false to true
-    setLoggedInUser: function (state, user) {
-      state.loggedInUser = user;
+    setUserInfo(state, user) {
+      state.user = user;
       state.isAuthenticated = true;
     },
     // delete all auth and user information from the state
@@ -34,12 +39,16 @@ export default createStore({
     },
   },
   actions: {
-    refreshToken() {
-      const t = JSON.parse(localStorage.getItem("refresh_token"));
-      this.$service
-        .refreshToken(t)
+    refreshToken(that) {
+      const t = localStorage.getItem("refresh_token");
+      const param = {
+        refresh_token: t,
+      };
+      //console.log("inside store1");
+      that.$service
+        .refreshToken(param)
         .then((res) => {
-          //console.log("this", res.data.createdUser);
+          //console.log("inside store2");
           this.LocalStore("access_token", res.data.access_token);
         })
         .catch(() => {
@@ -53,11 +62,27 @@ export default createStore({
           commit("setProducts", res.data.products);
         })
         .catch(() => {
-          this.ErrorAlert("Something went wrong!");
+          //this.ErrorAlert("Something went wrong!");
         });
     },
-    toggleSidebar(context) {
-      context.commit("toggleSidebar");
+    updateProduct({ dispatch }, id, body, that) {
+      that.$service
+        .updateProductByid(id, body)
+        .then(() => {
+          dispatch("getProducts", this);
+        })
+        .catch(() => {
+          //this.ErrorAlert("Something went wrong!");
+        });
+    },
+    updateCart({ commit }, payload) {
+      commit("setCart", payload);
+    },
+    toggleSidebar({ commit }) {
+      commit("toggleSidebar");
+    },
+    triggerUserSetting({ commit }, payload) {
+      commit("setUserInfo", payload);
     },
   },
   getters: {

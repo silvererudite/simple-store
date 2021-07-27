@@ -2,18 +2,7 @@
 /* eslint-disable max-len  */
 import request from "./utils";
 
-const backendURL = " http://localhost:8080";
-
-const usr = {
-  getQuizzesByOrgID: (id) => `${backendURL}/user/quizzes/${id}`,
-  startQuizSession: `${backendURL}/user/session`,
-  submitAnswer: `${backendURL}/user/submitanswer`,
-  submitQuiz: `${backendURL}/user/submitquiz`,
-  getQuestionsByQuizID: (id) => `${backendURL}/user/questions/${id}`,
-  getAssignmentByID: (id) => `${backendURL}/user/assignment/${id}`,
-  getAssignmentResultByID: (id) => `${backendURL}/user/results/${id}`,
-  submitAssignment: `${backendURL}/user/submitassignment`,
-};
+const backendURL = "http://localhost:8080";
 
 const auth = {
   signup: `${backendURL}/users/signup`,
@@ -27,28 +16,35 @@ const prod = {
   getProductById: (id) => `${backendURL}/products/${id}`,
   removeProductById: (id) => `${backendURL}/products/${id}`,
   createProduct: `${backendURL}/products`,
+  updateProductById: (id) => `${backendURL}/products/${id}`,
+};
+const ord = {
+  createOrder: `${backendURL}/orders`,
+  getOrders: `${backendURL}/orders`,
+  getOrderById: (id) => `${backendURL}/orders/${id}`,
+  deleteOrderById: (id) => `${backendURL}/orders/${id}`,
+  updateOrderById: (id) => `${backendURL}/orders/${id}`,
 };
 export default new (function Service() {
-  // USR ROUTES
-  this.usrGetQuizzesByOrgID = (orgID) =>
-    request.get(usr.getQuizzesByOrgID(orgID));
-  this.usrStartSession = (body) => request.post(usr.startQuizSession, body);
-  this.usrGetQuesByQuizID = (id) => request.get(usr.getQuestionsByQuizID(id));
-  this.usrSubmitAnswer = (body) => request.post(usr.submitAnswer, body);
-  this.usrSubmitQuiz = (body) => request.post(usr.submitQuiz, body);
-  this.usrSubmitAssignment = (body) => request.post(usr.submitAssignment, body);
-  this.usrgetAssignmentByID = (id) => request.get(usr.getAssignmentByID(id));
-  this.usrgetAssignmentResultByID = (id) =>
-    request.get(usr.getAssignmentResultByID(id));
   //login
   this.login = (body) => request.post(auth.login, body);
   //signup
   this.signup = (body) => request.post(auth.signup, body);
   //get new token
-  this.refreshToken = (body) => request.get(auth.new_token, { body });
+  this.refreshToken = (body) => request.get(auth.new_token, body);
   //go to profile
   this.profileInfo = (id) => request.get(auth.gotoProfile(id));
   //product
   this.createProduct = (body) => request.post(prod.createProduct, body);
   this.getProducts = () => request.get(prod.getProducts);
+  this.updateProduct = (id, body) =>
+    request.patch(prod.updateProductById(id), body);
+  this.removeProd = (id) => request.delete(prod.removeProductById(id));
+  //order
+  this.createOrder = (body) => request.post(ord.createOrder, body);
+  this.getOrderById = (id) => request.get(ord.removeProductById(id));
+  this.getOrders = () => request.get(ord.getOrders);
+  this.updateOrderById = (id, body) =>
+    request.patch(ord.updateOrderById(id), body);
+  this.removeOrder = (id) => request.delete(prod.deleteOrderById(id));
 })();

@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center items-center h-screen w-full bg-purple-200">
-    <div class="w-1/4 bg-white rounded shadow-2xl p-8 m-4">
+    <div class="sm:w-1/4 bg-white rounded shadow-2xl p-8 m-4">
       <h1
         class="block w-full text-center text-gray-800 text-2xl font-bold mb-6"
       >
@@ -66,9 +66,8 @@
           class="
             block
             bg-pink-400
-            hover:bg-pink-600
             uppercase
-            text-lg
+            text-lg text-white
             mx-auto
             p-4
             rounded
@@ -98,6 +97,7 @@
 
 <script>
 import Btn from "@/components/Button.vue";
+import Swal from "sweetalert2";
 export default {
   name: "SignUp",
   components: {
@@ -121,12 +121,17 @@ export default {
       return re.test(String(email).toLowerCase());
     },
     signUp() {
-      console.log("here");
+      //console.log("here");
       this.$service
         .signup(this.register)
         .then((res) => {
           //console.log("this", res.data.createdUser);
-          this.LocalStore("userInfo", res.data.createdUser.id);
+          //this.LocalStore("userInfo", res.data.createdUser.id);
+          Swal.fire({
+            icon: "info",
+            title: "Please save your user id for logging in",
+            text: res.data.createdUser.id,
+          });
           this.Goto({ name: "Login" });
         })
         .catch(() => {

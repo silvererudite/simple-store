@@ -25,4 +25,15 @@ export default {
   /* text-align: center;
   color: #2c3e50; */
 }
+.colored-toast .swal2-title {
+  color: black;
+}
+
+.colored-toast .swal2-close {
+  color: black;
+}
+
+.colored-toast .swal2-content {
+  color: black;
+}
 </style>

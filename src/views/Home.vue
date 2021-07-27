@@ -1,5 +1,5 @@
 <template>
-  <div class="home h-screen pb-14 bg-right bg-cover">
+  <div class="home h-screen bg-right bg-cover">
     <div
       class="
         container
@@ -34,29 +34,63 @@
             text-center
             md:text-left
             slide-in-bottom-h1
+            sm:mb-8
           "
         >
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit
         </h1>
-        <p
+        <div
           class="
             leading-normal
             text-base
             md:text-2xl
-            mb-8
+            sm:mb-8
+            mx-auto
+            sm:mx-0
             text-center
             md:text-left
             slide-in-bottom-subtitle
           "
         >
-          For all your needs
-        </p>
+          <router-link to="/signup">
+            <Btn
+              class="
+                p-2
+                mt-4
+                flex
+                items-center
+                border-2 border-indigo-600
+                text-indigo-600 text-xs
+                md:text-2xl
+                font-normal
+                rounded
+              "
+              ><div>Get Started</div>
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </div>
+            </Btn>
+          </router-link>
+        </div>
       </div>
 
       <!--Right Col-->
-      <div class="w-full xl:w-3/5 py-6 overflow-y-hidden">
+      <div class="w-full xl:w-3/5 sm:py-6 overflow-y-hidden">
         <svg
-          class="w-5/6 mx-auto lg:mr-0 slide-in-bottom"
+          class="w-full p-2 -mt-20 sm:w-5/6 mx-auto lg:mr-0"
           id="a80234ba-f3f6-42a2-9225-8d803f7486aa"
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
@@ -308,24 +342,19 @@
           />
         </svg>
       </div>
-
-      <!--Footer-->
-      <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
-        <a class="text-gray-500 no-underline hover:no-underline" href="#"
-          >&copy;Simple-store 2021</a
-        >
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-//import HelloWorld from "@/components/HelloWorld.vue";
+import Btn from "@/components/Button.vue";
 
 export default {
   name: "Home",
-  components: {},
+  components: {
+    Btn,
+  },
 };
 </script>
 <style scoped>
